@@ -1,0 +1,28 @@
+/* Sidebar styles */
+.stSidebar {
+    background-color: #2C3E50;  /* Dark blue */
+    padding: 20px;
+}
+
+.stSidebar h1, .stSidebar h2, .stSidebar h3, .stSidebar h4, .stSidebar h5 {
+    color: #ECF0F1;  /* Light grey text */
+}
+
+.stSidebar .stRadio {
+    font-size: 18px;  /* Increase font size for better readability */
+    color: #ECF0F1;  /* Light grey text */
+}
+
+.stSidebar .stRadio:hover {
+    color: #1ABC9C;  /* Hover effect: Light green */
+}
+
+.stButton {
+    background-color: #1ABC9C !important;  /* Green button */
+    border-radius: 8px !important;  /* Rounded corners */
+    color: white !important;  /* White text */
+}
+
+.stButton:hover {
+    background-color: #16A085 !important;  /* Darker green on hover */
+}
