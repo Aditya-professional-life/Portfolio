@@ -11,6 +11,8 @@ from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 import os
 from dotenv import load_dotenv
 import tempfile
+import json
+# import os
 
 # Load environment variables
 load_dotenv()
@@ -70,6 +72,39 @@ def create_conversational_chain(vector_store):
     )
     return chain
 
+def load_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+# Load CSS
+load_css("style.css")
+
+# Sidebar navigation
+# st.sidebar.title("Portfolio Navigator")
+# section_choice = st.sidebar.radio(
+#     "Select a section",
+#     ["Introduction", "Skills", "Projects", "Work Experience", "Get in Touch", "Resume ChatBot"]
+# )
+
+
+def save_contact_info(name, email, message):
+    new_entry = {
+        "name": name,
+        "email": email,
+        "message": message
+    }
+
+    data_file = "data.json"
+    if not os.path.exists(data_file):
+        with open(data_file, "w") as file:
+            json.dump([], file)  # Create an empty JSON array
+
+    with open(data_file, "r+") as file:
+        data = json.load(file)
+        data.append(new_entry)
+        file.seek(0)
+        json.dump(data, file, indent=4)
+
 def main():
     load_dotenv()
     initialize_session_state()
@@ -77,9 +112,11 @@ def main():
     # Sidebar navigation
     st.sidebar.title("Portfolio Navigator")
     section_choice = st.sidebar.radio(
-        "Select a section",
-        ["Introduction", "Skills", "Projects", "Work Experience", "Get in Touch", "Resume ChatBot"]
-    )
+    "Select a section",
+    ["Introduction", "Skills", "Projects", "Work Experience", "Get in Touch", "Resume ChatBot"],
+    key="section_choice"  # Provide a unique key here
+)
+
 
     # Introduction section
     if section_choice == "Introduction":
@@ -177,7 +214,6 @@ def main():
     elif section_choice == "Get in Touch":
         st.title("Get in Touch with Me")
         with st.form(key='contact_form'):
-            st.write("Feel free to reach out to me through the form below.")
             name = st.text_input("Name")
             email = st.text_input("Email")
             message = st.text_area("Message")
@@ -185,10 +221,10 @@ def main():
 
             if submit_button:
                 if name and email and message:
+                    save_contact_info(name, email, message)
                     st.success("Thank you for your message! I will get back to you soon.")
                 else:
                     st.error("Please fill out all fields before submitting.")
-
     # Resume ChatBot section
     elif section_choice == "Resume ChatBot":
         st.title("Resume ChatBot using LLaMA2 :books:")
